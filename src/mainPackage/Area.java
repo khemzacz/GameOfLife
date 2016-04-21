@@ -141,5 +141,49 @@ public class Area {
 			}
 		
 	}
+	
+	public void insertGliderGun(int i,int j){
+		
+		if ( ( (i+9 ) > (height-1) ) || ( (j+36) > (width-1) ) ) {System.out.println("Not enough space to spawn GliderGun"); return;}
+		tab[i+4][j+1].on();
+		tab[i+4][j+2].on();
+		tab[i+5][j+1].on();
+		tab[i+5][j+2].on();
+		// /\ Pierwszy Kwadrat
+		tab[i+4][j+11].on();
+		tab[i+5][j+11].on();
+		tab[i+6][j+11].on();
+		tab[i+3][j+12].on();
+		tab[i+7][j+12].on();
+		tab[i+2][j+13].on();
+		tab[i+8][j+13].on();
+		tab[i+2][j+14].on();
+		tab[i+8][j+14].on();
+		tab[i+5][j+15].on();
+		tab[i+3][j+16].on();
+		tab[i+7][j+16].on();
+		tab[i+4][j+17].on();
+		tab[i+5][j+17].on();
+		tab[i+6][j+17].on();
+		tab[i+5][j+18].on();
+		tab[i+2][j+21].on();
+		tab[i+3][j+21].on();
+		tab[i+4][j+21].on();
+		tab[i+2][j+22].on();
+		tab[i+3][j+22].on();
+		tab[i+4][j+22].on();
+		tab[i+1][j+23].on();
+		tab[i+5][j+23].on();
+		tab[i][j+25].on();
+		tab[i+1][j+25].on();
+		tab[i+5][j+25].on();
+		tab[i+6][j+25].on();
+		tab[i+2][j+35].on();
+		tab[i+3][j+35].on();
+		tab[i+2][j+36].on();
+		tab[i+3][j+36].on();
+		
+		
+	}
 }
 

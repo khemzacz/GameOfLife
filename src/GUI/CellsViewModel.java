@@ -1,8 +1,10 @@
 package GUI;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
+import java.awt.GridBagLayout;
 import java.awt.Point;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
@@ -17,15 +19,18 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class CellsViewModel extends JPanel implements ComponentListener, MouseListener, Runnable {
-	
+	private JPanel self;
 	private int lineThickness;
 	private int cellSize;
 	private int distance;
 	private ArrayList<Cell> cells;
 	private Area a;
+	private boolean shutdown;
 	//private ArrayList<JPanel> panels;
 	
 	public CellsViewModel(Area a){
+		shutdown=true;
+		self = this;
 		cells = new ArrayList<Cell>();
 		//panels = new ArrayList<JPanel>();
 		lineThickness=1;
@@ -53,7 +58,19 @@ public class CellsViewModel extends JPanel implements ComponentListener, MouseLi
 	
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
+		while(!shutdown){
+			a.gameOfLifeStep();
+			self.setIgnoreRepaint(true);
+			try {
+				self.repaint();	
+				Thread.sleep(200);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+		}
 		
 	}
 
@@ -167,4 +184,13 @@ public class CellsViewModel extends JPanel implements ComponentListener, MouseLi
 		repaint();
 	}
 
+	public void spawnGliderGun() {
+		a.insertGliderGun((int)Math.sqrt(cells.size())/2, (int)Math.sqrt(cells.size())/2-15);
+		repaint();
+		
+	}
+	public void onOff(){
+		shutdown=!shutdown;
+	}
+	
 }
