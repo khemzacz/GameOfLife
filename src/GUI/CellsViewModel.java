@@ -1,16 +1,19 @@
 package GUI;
 
 import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import mainPackage.Cell;
 import mainPackage.Area;
 
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class CellsViewModel extends JPanel implements ComponentListener, MouseListener, Runnable {
@@ -19,16 +22,33 @@ public class CellsViewModel extends JPanel implements ComponentListener, MouseLi
 	private int cellSize;
 	private int distance;
 	private ArrayList<Cell> cells;
+	private Area a;
+	//private ArrayList<JPanel> panels;
 	
-	public CellsViewModel(){
+	public CellsViewModel(Area a){
 		cells = new ArrayList<Cell>();
-		lineThickness=3;
-		cellSize = 7;
+		//panels = new ArrayList<JPanel>();
+		lineThickness=1;
+		cellSize = 8;
 		distance = lineThickness+cellSize;
+		this.a =a ;
+		getCellsFromArea();
+		for(Cell cell : cells){
+			add(cell);
+			cell.addMouseListener(new MouseAdapter(){
+				@Override
+	            public void mousePressed(MouseEvent e) {
+	            	Cell clicked = (Cell) e.getSource();
+	            	clicked.switchState();
+	            	cell.repaint();
+	            }
+				
+			});
+		}
 	}
 	
-	public void getCellsFromArea(Area a){
-		cells=a.getCellsAsArrayList();		
+	public void getCellsFromArea(){
+		cells=a.getReferencesToCells();		
 	}
 	
 	@Override
@@ -91,23 +111,40 @@ public class CellsViewModel extends JPanel implements ComponentListener, MouseLi
 		
 	}
 	
+	public void paintCell(int x, int y){
+		
+	}
+	
 	@Override
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 		int x=0; int y=0; int iteration=1;
-		g.setColor(Color.blue);
+		g.setColor(Color.red);
 		for(Cell cell : cells){
+			x = (distance*cell.getJ());
+			y = (distance*cell.getI());
+			cell.setLayout(null);
+			cell.setLocation(x+lineThickness, y+lineThickness);
+			cell.setSize(cellSize, cellSize);
 			if (cell.isAlive())
 			{
-				x = (distance*cell.getJ());
-				y = (distance*cell.getI());
-				g.fillRect(x+lineThickness,y+lineThickness , cellSize, cellSize);
+				
+				cell.setBackground(Color.red);
+
+				
+				//g.fillRect(x+lineThickness,y+lineThickness , cellSize, cellSize);
 				
 			}
+			cell.repaint();
+
+			
+			
+			
+			
 			iteration++;
 		}
 		
-		g.setColor(Color.WHITE);
+		g.setColor(Color.GRAY);
 		x=0;y=0;
 		int line_length = (int) (Math.sqrt(cells.size()) *distance);
 		for (int i = 0; i<Math.sqrt(cells.size());i++){
@@ -118,6 +155,16 @@ public class CellsViewModel extends JPanel implements ComponentListener, MouseLi
 		g.fillRect(x, y+line_length,line_length+lineThickness, lineThickness );
 		g.fillRect(x+line_length, y, lineThickness,line_length + lineThickness);
 		
+	}
+
+	public void nextStep() {
+		a.gameOfLifeStep();
+		repaint();
+	}
+	
+	public void gameOfLife(int steps){
+		a.gameOfLife(steps);
+		repaint();
 	}
 
 }

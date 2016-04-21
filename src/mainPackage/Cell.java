@@ -1,12 +1,17 @@
 package mainPackage;
 
-public class Cell {
+import java.awt.Color;
+
+import javax.swing.JPanel;
+
+public class Cell extends JPanel {
 	boolean alive;
 	private int i=0; private int j=0;
 	int grain;
 	
 	public Cell(int i, int j){
 		alive=false;
+		setVisible(true);
 		grain=0;
 		this.i=i; this.j=j;
 	}
@@ -15,6 +20,7 @@ public class Cell {
 		this.i=cell.i;
 		this.j=cell.j;
 		this.alive = cell.alive;
+		setVisible(cell.isVisible());
 		this.grain=cell.grain;
 	}
 
@@ -27,9 +33,11 @@ public class Cell {
 	
 	public void on(){
 		alive=true;
+		setBackground(Color.red);
 	}
 	public void off(){
 		alive=false;
+		setBackground(null);;
 	}
 	
 	public int getI(){
@@ -40,4 +48,16 @@ public class Cell {
 		return j;
 	}
 	
+	public void switchState(){
+		if(this.alive){
+			alive = false;
+			this.setBackground(null);
+		}
+			
+		else{
+			alive=true;
+			this.setBackground(Color.red);
+		}
+			
+	}
 }

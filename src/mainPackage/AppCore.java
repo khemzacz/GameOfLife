@@ -5,18 +5,17 @@ public class AppCore {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		Area field = new Area(20,20);
+		Area field = new Area(50,50);
 		
-		MainWindow window = new MainWindow();
+		MainWindow window = new MainWindow(field);
 		
 		
 		
 		field.injectTestingStructures();
-		field.printCells();
+		//field.printCells();
 		field.gameOfLifeStep();
-		field.printCells();
+		//field.printCells();
 		
-		window.initializeCells(field);
 		window.setVisible(true);
 	}
 

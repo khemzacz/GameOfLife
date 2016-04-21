@@ -44,6 +44,15 @@ public class Area {
 		return cells;
 	}
 	
+	public ArrayList<Cell> getReferencesToCells(){
+		ArrayList<Cell> cells = new ArrayList<Cell>();
+		for (int i=0;i<height;i++)
+			for (int j=0;j<width;j++){
+				cells.add(tab[i][j]);
+			}
+		return cells;
+	}
+	
 	public Cell[][] getCellularCopy(){
 		Cell[][] pom = new Cell[height][width];
 		for (int i=0;i<height;i++){
