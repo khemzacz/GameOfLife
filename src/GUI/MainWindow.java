@@ -5,10 +5,13 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 import java.awt.Canvas;
 import java.awt.FlowLayout;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -26,9 +29,12 @@ import net.miginfocom.swing.MigLayout;
 import java.awt.CardLayout;
 import java.awt.Component;
 import java.awt.Panel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 import java.awt.GridLayout;
 import javax.swing.JLabel;
 import java.awt.Button;
@@ -36,6 +42,8 @@ import javax.swing.JTable;
 import javax.swing.BoxLayout;
 import java.awt.Dimension;
 import javax.swing.SwingConstants;
+import javax.swing.JSpinner;
+import javax.swing.JList;
 
 public class MainWindow extends JFrame {
 	private boolean running;
@@ -44,14 +52,16 @@ public class MainWindow extends JFrame {
 	private JPanel panel;
 	private JButton btnNewButton;
 	private JButton btnNewButton_1;
-	private Area a;
+	private JButton btnNewButton_2;
+	private JButton btnNewButton_3;
+	private Area a; private JComboBox bcScroll;
 	private JButton btnTogglerealtimesimulation;
 	/**
 	 * Create the frame.
 	 */
 	public MainWindow(Area a) {
 		running = false;
-		setSize(new Dimension(600, 582));
+		setSize(new Dimension(900, 601));
 		setMaximumSize(new Dimension(1880, 1060));
 		setMinimumSize(new Dimension(500, 500));
 		this.a =a ;
@@ -61,10 +71,9 @@ public class MainWindow extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		
 		panel = new JPanel();
-		panel.setPreferredSize(new Dimension(600, 25));
-		panel.setSize(new Dimension(600, 25));
+		panel.setPreferredSize(new Dimension(875, 25));
+		panel.setSize(new Dimension(875, 25));
 		contentPane.add(panel);
 		panel.setLayout(null);
 		
@@ -86,7 +95,7 @@ public class MainWindow extends JFrame {
 		});
 		panel.add(btnNewButton_1);
 		
-		JButton btnNewButton_2 = new JButton("SpawnGliderAtCenter");
+		btnNewButton_2 = new JButton("SpawnGliderAtCenter");
 		btnNewButton_2.setBounds(245, 0, 135, 23);
 		btnNewButton_2.addMouseListener(new MouseAdapter(){
 			
@@ -110,11 +119,16 @@ public class MainWindow extends JFrame {
             		btnNewButton.setEnabled(true);
             		btnNewButton_1.setEnabled(true);
             		btnNewButton_2.setEnabled(true);
+            		btnNewButton_3.setEnabled(true);
+            		bcScroll.setEnabled(true);
+            		cellGrid.addCellListeners();
             	} else{
-            		
+            		cellGrid.removeListenersFromCells();
             		btnNewButton.setEnabled(false);
             		btnNewButton_1.setEnabled(false);
             		btnNewButton_2.setEnabled(false);
+            		btnNewButton_3.setEnabled(false);
+            		bcScroll.setEnabled(false);
             		cellGrid.onOff();
             		t1.start();
             		
@@ -124,6 +138,42 @@ public class MainWindow extends JFrame {
 			
 		});
 		panel.add(btnTogglerealtimesimulation);
+		
+		btnNewButton_3 = new JButton("ClearAll");
+		btnNewButton_3.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mousePressed(MouseEvent e) {
+            	cellGrid.clearTheArea();
+            }
+			
+		}); 
+		btnNewButton_3.setBounds(601, 0, 89, 23);
+		panel.add(btnNewButton_3);
+		
+		ArrayList<String> pom1 = new ArrayList<String>();
+		pom1.add("Periodic");
+		pom1.add("Zeros");
+		String[] listData = new String [pom1.size()];
+		listData = pom1.toArray(listData);
+		//bc.setBounds(700, 0, 77, 23);
+		bcScroll = new JComboBox(listData);
+		bcScroll.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				String choice = (String)bcScroll.getSelectedItem();
+				if (choice.equals("Periodic")){
+					cellGrid.setPeriodicBC();
+				}
+				else if (choice.equals("Zeros")){
+					cellGrid.setZeroBC();
+				}
+			}
+			
+			
+		});
+		bcScroll.setBounds(700, 0, 77, 23);
+		panel.add(bcScroll);
 		btnNewButton.addMouseListener(new MouseAdapter(){
 			
             @Override
@@ -136,7 +186,6 @@ public class MainWindow extends JFrame {
 		cellGrid.setPreferredSize(new Dimension(500, 500));
 		cellGrid.setLayout(new GridBagLayout());
 		contentPane.add(cellGrid);
-		this.setSize(697,599);
 		
 		
 	}

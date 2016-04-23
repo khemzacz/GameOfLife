@@ -6,7 +6,8 @@ public class Area {
 	private Cell[][] tab;
 	private int height=0;
 	private int width=0;
-	
+	private boolean periodic=true;
+	private boolean zeros=false;
 	
 	public Area(int width, int height){
 		this.height=height; this.width=width;
@@ -117,12 +118,20 @@ public class Area {
 							}
 						}
 							
+						if(periodic){
+							if (jj > height - 1) jjj = 0;
+							if (ii > width - 1) iii = 0;
+							if (jj < 0) jjj = (height - 1);
+							if (ii < 0) iii = (width - 1);
 							
-						if (jj > height - 1) jjj = 0;
-						if (ii > width - 1) iii = 0;
-						if (jj < 0) jjj = (height - 1);
-						if (ii < 0) iii = (width - 1);
-
+						}
+						else if (zeros){
+							if (jj > height - 1) continue;
+							if (ii > width - 1) continue;
+							if (jj < 0) continue;
+							if (ii < 0) continue;							
+						}
+						
 						if (prev[iii][jjj].isAlive()) {
 							neighbours++;
 						}
@@ -183,6 +192,20 @@ public class Area {
 		tab[i+2][j+36].on();
 		tab[i+3][j+36].on();
 		
+		
+	}
+
+
+	public void setPeriodicBC() {
+		periodic=true;
+		zeros=false;
+		
+	}
+
+
+	public void setZeroBC() {
+		zeros=true;
+		periodic=false;
 		
 	}
 }

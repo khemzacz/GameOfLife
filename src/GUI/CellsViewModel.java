@@ -193,4 +193,43 @@ public class CellsViewModel extends JPanel implements ComponentListener, MouseLi
 		shutdown=!shutdown;
 	}
 	
+	
+	public void removeListenersFromCells(){
+		for ( Cell cell: cells){
+			cell.removeMouseListener(cell.getMouseListeners()[0]);			
+		}		
+	}
+	public void addCellListeners(){
+		for (Cell cell:cells){
+			cell.addMouseListener(new MouseAdapter(){
+				@Override
+	            public void mousePressed(MouseEvent e) {
+	            	Cell clicked = (Cell) e.getSource();
+	            	clicked.switchState();
+	            	cell.repaint();
+	            }
+			});
+		}
+		
+	}
+
+	public void clearTheArea() {
+		for (Cell cell:cells)
+		{
+			cell.off();
+		}
+		repaint();
+		
+	}
+
+	public void setPeriodicBC() {
+		a.setPeriodicBC();
+		
+	}
+
+	public void setZeroBC() {
+		a.setZeroBC();
+		
+	}
+	
 }
