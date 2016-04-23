@@ -1,8 +1,11 @@
 package mainPackage;
 
 import java.awt.Color;
+import java.awt.Graphics;
+import java.util.concurrent.locks.ReentrantLock;
 
 import javax.swing.JPanel;
+import javax.swing.RepaintManager;
 
 public class Cell extends JPanel {
 	boolean alive;
@@ -33,11 +36,11 @@ public class Cell extends JPanel {
 	
 	public void on(){
 		alive=true;
-		setBackground(Color.red);
+		//setBackground(Color.red);
 	}
 	public void off(){
 		alive=false;
-		setBackground(null);;
+		//setBackground(null);
 	}
 	
 	public int getI(){
@@ -51,13 +54,15 @@ public class Cell extends JPanel {
 	public void switchState(){
 		if(this.alive){
 			alive = false;
-			this.setBackground(null);
+			//this.setBackground(null);
 		}
 			
 		else{
 			alive=true;
-			this.setBackground(Color.red);
+			//this.setBackground(Color.red);
 		}
 			
 	}
+	  
+
 }

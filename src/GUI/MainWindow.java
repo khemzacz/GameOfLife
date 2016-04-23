@@ -39,6 +39,7 @@ import java.awt.GridLayout;
 import javax.swing.JLabel;
 import java.awt.Button;
 import javax.swing.JTable;
+import javax.swing.RepaintManager;
 import javax.swing.BoxLayout;
 import java.awt.Dimension;
 import javax.swing.SwingConstants;
@@ -186,7 +187,5 @@ public class MainWindow extends JFrame {
 		cellGrid.setPreferredSize(new Dimension(500, 500));
 		cellGrid.setLayout(new GridBagLayout());
 		contentPane.add(cellGrid);
-		
-		
 	}
 }

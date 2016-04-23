@@ -12,11 +12,14 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.concurrent.locks.ReentrantLock;
+
 import mainPackage.Cell;
 import mainPackage.Area;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.RepaintManager;
 
 public class CellsViewModel extends JPanel implements ComponentListener, MouseListener, Runnable {
 	private JPanel self;
@@ -40,16 +43,8 @@ public class CellsViewModel extends JPanel implements ComponentListener, MouseLi
 		getCellsFromArea();
 		for(Cell cell : cells){
 			add(cell);
-			cell.addMouseListener(new MouseAdapter(){
-				@Override
-	            public void mousePressed(MouseEvent e) {
-	            	Cell clicked = (Cell) e.getSource();
-	            	clicked.switchState();
-	            	cell.repaint();
-	            }
-				
-			});
 		}
+		addCellListeners();
 	}
 	
 	public void getCellsFromArea(){
@@ -60,19 +55,20 @@ public class CellsViewModel extends JPanel implements ComponentListener, MouseLi
 	public void run() {
 		while(!shutdown){
 			a.gameOfLifeStep();
-			self.setIgnoreRepaint(true);
 			try {
-				self.repaint();	
-				Thread.sleep(200);
+				
+				Thread.sleep(400);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+			repaint();
 			
 		}
 		
 	}
+	
+
 
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
@@ -144,20 +140,12 @@ public class CellsViewModel extends JPanel implements ComponentListener, MouseLi
 			cell.setLocation(x+lineThickness, y+lineThickness);
 			cell.setSize(cellSize, cellSize);
 			if (cell.isAlive())
-			{
-				
+			{				
 				cell.setBackground(Color.red);
-
-				
-				//g.fillRect(x+lineThickness,y+lineThickness , cellSize, cellSize);
-				
-			}
+			} 
+			else
+				cell.setBackground(null);
 			cell.repaint();
-
-			
-			
-			
-			
 			iteration++;
 		}
 		
@@ -171,6 +159,9 @@ public class CellsViewModel extends JPanel implements ComponentListener, MouseLi
 		}
 		g.fillRect(x, y+line_length,line_length+lineThickness, lineThickness );
 		g.fillRect(x+line_length, y, lineThickness,line_length + lineThickness);
+		
+		
+		
 		
 	}
 
@@ -187,7 +178,6 @@ public class CellsViewModel extends JPanel implements ComponentListener, MouseLi
 	public void spawnGliderGun() {
 		a.insertGliderGun((int)Math.sqrt(cells.size())/2, (int)Math.sqrt(cells.size())/2-15);
 		repaint();
-		
 	}
 	public void onOff(){
 		shutdown=!shutdown;
@@ -206,7 +196,12 @@ public class CellsViewModel extends JPanel implements ComponentListener, MouseLi
 	            public void mousePressed(MouseEvent e) {
 	            	Cell clicked = (Cell) e.getSource();
 	            	clicked.switchState();
-	            	cell.repaint();
+	            	if(clicked.isAlive()){
+	            		clicked.setBackground(Color.red);
+	            	} 
+	            	else 
+	            		clicked.setBackground(null);
+	            	clicked.repaint();
 	            }
 			});
 		}
@@ -231,5 +226,7 @@ public class CellsViewModel extends JPanel implements ComponentListener, MouseLi
 		a.setZeroBC();
 		
 	}
+
+
 	
 }
